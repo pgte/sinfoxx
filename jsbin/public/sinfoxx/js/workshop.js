@@ -33,12 +33,25 @@ function wrapCode(code) {
 
 function run(embed, result) {
   
+  var consoled = false;
+
+  function printResult(res) {
+    if (res !== undefined) {
+      var text = JSON.stringify(res);
+    }
+    if (! consoled) {
+      text += ' (' + (typeof res) + ')';
+      result.text(text);      
+    }
+  }
+
   var _console = {};
   _console.log = function(what) {
     if (arguments.length > 1) {
       what = [].slice(arguments);
     }
-    result.text(what);
+    printResult(what);
+    consoled = true;
   }
 
   result.text('Running...');
@@ -59,11 +72,6 @@ function run(embed, result) {
     console.log(err);
     result.text('Error: ' + err.message);
   } else {
-    console.log('result:', res);
-    if (res !== undefined) {
-      var text = JSON.stringify(res);
-      
-      result.text(text);      
-    }
+    printResult(res);
   }
 }
