@@ -1,0 +1,10 @@
+.jsbin-wrap {
+  width: 45%;
+  display: inline-block;
+  margin-right: 10%;
+}
+.run {
+  display: inline-block;
+  width: 45%;
+  vertical-align: top
+}
