@@ -10,7 +10,7 @@ $(function() {
     $embed.wrap('<div class="wrap"></div>');
 
     $embed = $('#' + id).parent();
-    $embed.after('<div class="run"><a href="#" class="run btn">Run</a><pre class="result"></pre></div>');
+    $embed.after('<div class="run"><a href="#" class="run btn">Run</a><div class="result"></div></div>');
 
     $embed = $('#' + id);
 
@@ -36,13 +36,16 @@ function run(embed, result) {
   var consoled = false;
 
   function printResult(res) {
+    if (res === undefined) return;
+    if (! consoled) result.text('');
     if (res !== undefined) {
       var text = JSON.stringify(res);
     }
-    if (! consoled) {
-      text += ' (' + (typeof res) + ')';
-      result.text(text);      
+    if (consoled) {
+      text = result.html() + '<br />' + text;
     }
+    text += ' (' + typeof res + ')';
+    result.html(text);
   }
 
   var _console = {};
