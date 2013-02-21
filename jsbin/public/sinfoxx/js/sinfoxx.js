@@ -1,20 +1,19 @@
 var app = angular.module('sinfoxx', []);
 app.config(function($routeProvider, $locationProvider) {
   $routeProvider.
-    when('/', {templateUrl: 'pages/index.html'});
-  
+    when('/', {templateUrl: 'pages/index.html'}).
+    when('/javascript', {templateUrl: 'pages/javascript.html'}).
+    when('/consola', {templateUrl: 'pages/consola.html'}).
+    when('/dynamic-typing', {templateUrl: 'pages/dynamic-typing.html'});
 });
 
 
 app.run(function($rootScope) {
-  console.log('app.run');
   $rootScope.$on('$viewContentLoaded', jsbinify);
 });
 
 
 function jsbinify() {
-
-  console.log('jsbinifying');
 
   (function (window, document, undefined) {
 
@@ -267,8 +266,11 @@ function jsbinify() {
       function printResult(res) {
         if (res === undefined) return;
         if (! consoled) result.text('');
-        if (res !== undefined) {
-          var text = JSON.stringify(res);
+        var text;
+        if (typeof res == 'function') {
+          text = res.toString();
+        } else if (res !== undefined) {
+          text = JSON.stringify(res);
         }
         if (consoled) {
           text = result.html() + '<br />' + text;
