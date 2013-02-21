@@ -30,7 +30,7 @@
                                    <link rel="shortcut icon" href="ico/favicon.png">
   </head>
 
-  <body>
+  <body ng-app="sinfoxx">
 
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
@@ -52,13 +52,7 @@
       </div>
     </div>
 
-    <div class="container">
-
-      <h1>Embed</h1>
-      <a class="jsbin-embed" href="//localhost:3000/ipusit/1/embed?javascript">JS Bin</a>
-    
-      <h1>Another embed</h1>
-      <a class="jsbin-embed" href="//localhost:3000/ogufet/1/embed?javascript">JS Bin</a>
+    <div class="container" ng-view>
 
     </div> <!-- /container -->
 
@@ -67,7 +61,8 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/js/embed.js"></script>
     <script src="js/jquery-1.9.1.min.js"></script>
-    <script src="js/workshop.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/sinfoxx.js"></script>
   </body>
 </html>
