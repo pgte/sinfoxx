@@ -1,0 +1,142 @@
+<h1>Event Loop, Single-threaded and I/O</h1>
+
+<p>Em JavaScript, no browser e em Node, tudo acontece numa só thread.</p>
+
+<p>Quanto há comunicação para fora do processo (ficheiros, rede), Node.js não bloqueia.</p>
+
+<p>Isto não acontece:</p>
+
+<pre>
+<code class="javascript">
+var result = fetchSomethingFromTheInternet();
+console.log('I got this from the internet:', result)
+</code>
+</pre>
+
+<p>Temos de passar uma função que será invocada quando a operação terminar:</p>
+
+<pre>
+<code class="javascript">
+function myCallback(result) {
+  console.log('I got this from the internet:', result)
+}
+
+fetchSomethingFromTheInternet(myCallback);
+</code>
+</pre>
+
+<p>E mais sucintamente:</p>
+
+<pre>
+<code class="javascript">
+fetch(function myCallback(result) {
+  console.log('I got this from the internet:', result)
+});
+</code>
+</pre>
+
+
+<h2>Vamos bloquear o event loop:</h2>
+
+<pre>
+<code class="javascript">
+setTimeout(function() {
+  console.log('Hey there!')
+}, 1000);
+
+console.log('timeout is set, should fire in one second...');
+
+var counter = 0;
+while(true) {
+  counter ++;
+  if (counter % 10000000 === 0) console.log(counter);
+}
+</code>
+</pre>
+
+<p>E outra vez:</p>
+
+<pre>
+<code class="javascript">
+setTimeout(function() {
+  console.log('Hey there!')
+}, 1000);
+
+console.log('timeout is set, should fire in one second...');
+
+var counter = 0;
+while(true) {
+  counter ++;
+  if (counter % 10000000 === 0) console.log(counter);
+}
+</code>
+</pre>
+
+
+<h2>Exemplos:</h2>
+
+<p><b>03_fs_example.js:</b></p>
+
+<pre>
+<code class="javascript">
+var fs = require('fs');
+
+fs.readFile(__dirname + '/03_fs_examples.js', 'utf8', function(err, data) {
+  if (err) throw err;
+  console.log(data);
+});
+</code>
+</pre>
+
+
+<p><b>04_chain_callbacks.js:</b></p>
+
+<pre>
+<code class="javascript">
+var fs = require('fs');
+
+var fileName = __dirname + '/04_chain_callbacks.js';
+fs.exists(fileName, function(exists) {
+  
+  if (!exists) throw new Error('File does not exist');
+
+  fs.readFile(fileName, 'utf8', function(err, data) {
+    if (err) throw err;
+    console.log(data);
+  });
+});
+</code>
+</pre>
+
+<p><b>05_http_request:</b></p>
+
+<pre>
+<code class="javascript">
+var http = require('http');
+
+var req = http.request('http://www.google.pt/');
+req.on('response', function(res) {
+  
+  console.log('response headers:', res.headers);
+  
+  var responseBody = '';
+
+  res.setEncoding('utf8');
+
+  res.on('data', function(d) {
+    responseBody += d;
+  });
+
+  res.once('end', function() {
+    console.log('response full body:', responseBody);
+  });
+  
+});
+
+req.end();
+</code>
+</pre>
+
+<hr />
+
+<p>Next: <a href="#/node/event-emitter">Event Emitter</a></p>

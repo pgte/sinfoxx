@@ -4,14 +4,29 @@ app.config(function($routeProvider, $locationProvider) {
     when('/', {templateUrl: 'pages/index.html'}).
     when('/javascript', {templateUrl: 'pages/javascript.html'}).
     when('/consola', {templateUrl: 'pages/consola.html'}).
-    when('/dynamic-typing', {templateUrl: 'pages/dynamic-typing.html'});
+    when('/dynamic-typing', {templateUrl: 'pages/dynamic-typing.html'}).
+    when('/object-based', {templateUrl: 'pages/object-based.html'}).
+    when('/prototypes', {templateUrl: 'pages/prototypes.html'}).
+    when('/constructors', {templateUrl: 'pages/constructors.html'}).
+    when('/methods', {templateUrl: 'pages/methods.html'}).
+    when('/first-class-functions', {templateUrl: 'pages/first-class-functions.html'}).
+    when('/closures', {templateUrl: 'pages/closures.html'}).
+    when('/node/install', {templateUrl: 'pages/node/install.html'}).
+    when('/node/io', {templateUrl: 'pages/node/io.html'}).
+    when('/node/event-emitter', {templateUrl: 'pages/node/event-emitter.html'}).
+    when('/node/streams', {templateUrl: 'pages/node/streams.html'});
 });
 
 
 app.run(function($rootScope) {
-  $rootScope.$on('$viewContentLoaded', jsbinify);
+  $rootScope.$on('$viewContentLoaded', pageChanged);
 });
 
+function pageChanged() {
+  jsbinify();
+  hljs.initHighlighting();  
+  console.log('done');
+}
 
 function jsbinify() {
 
@@ -264,11 +279,14 @@ function jsbinify() {
       var consoled = false;
 
       function printResult(res) {
-        if (res === undefined) return;
         if (! consoled) result.text('');
         var text;
-        if (typeof res == 'function') {
+        if (res === 'undefined') {
+          text = 'undefined';
+        } else if (typeof res == 'function') {
           text = res.toString();
+        } else if (typeof res == 'number' && isNaN(res)) {
+          text = 'NaN';
         } else if (res !== undefined) {
           text = JSON.stringify(res);
         }
@@ -306,7 +324,7 @@ function jsbinify() {
         console.log(err);
         result.text('Error: ' + err.message);
       } else {
-        printResult(res);
+        if (res !== undefined) printResult(res);
       }
     }
   });

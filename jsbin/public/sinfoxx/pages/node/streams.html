@@ -1,0 +1,136 @@
+<h1>Streams</h1>
+
+<p>Streams são dados ao longo do tempo. Node.js tem suporte nativo para streams.</p>
+
+
+<h2>Read Stream</h2>
+
+<p><b>20_read_stream.js:</b></p>
+
+<pre>
+<code class="javascript">
+var fs = require('fs');
+
+var readStream = fs.createReadStream(__dirname + '/20_read_stream.js',
+  {bufferSize: 20});
+
+readStream.setEncoding('utf8');
+
+readStream.on('data', function(d) {
+  console.log('data:', d);
+});
+</code>
+</pre>
+
+
+<h2>Write Stream</h2>
+
+<p><b>21_write_stream.js:</b></p>
+
+<pre>
+<code class="javascript">
+var fs = require('fs');
+
+var writeStream = fs.createWriteStream(__dirname + '/out.txt');
+
+var stopAt = Date.now() + 10000;
+
+var interval = setInterval(function() {
+  writeStream.write(Date.now());  
+  
+  if (Date.now() > stopAt) {
+    writeStream.end();
+    clearInterval(interval);
+  }
+}, 1000);
+</code>
+</pre>
+
+
+<h2>Duplex Stream</h2>
+
+<p><b>22_duplex_stream.js:</b></p>
+
+<pre>
+<code class="javascript">
+var net = require('net');
+
+var server = net.createServer();
+
+server.on('connection', function(stream) {
+  stream.setEncoding('utf8');
+
+  console.log('new connection');
+  
+  stream.on('data', function(d) {
+    stream.write(d.toUpperCase());
+    if (d.toLowerCase() == 'quit\n') {
+      stream.end('Bye bye!');
+    }
+  });
+
+});
+
+server.listen(8080);
+</code>
+</pre>
+
+
+<h2>Piping</h2>
+
+<p><b>22_duplex_stream.js:</b></p>
+
+<pre>
+<code class="javascript">
+var net = require('net');
+
+var server = net.createServer();
+
+server.on('connection', function(stream) {
+  stream.pipe(stream);
+});
+
+server.listen(8080);
+</code>
+</pre>
+
+
+<h2>Your Own Duplex Stream:</h2>
+
+<p><b>23_filter_stream.js:</b></p>
+
+<pre>
+<code class="javascript">
+/// --- Filter Stream
+
+var Stream = require('stream');
+
+var upper = new Stream();
+
+upper.writable = upper.readable = true;
+
+upper.write = function(d) {
+  upper.emit('data', d.toString().toUpperCase());
+};
+
+
+/// --- TCP Server
+
+var server = require('net').createServer();
+
+server.on('connection', function(stream) {
+  stream.
+    pipe(upper).
+    pipe(stream);
+
+  stream.on('data', function(d) {
+    if (d.toString().toLowerCase() === 'quit\n') stream.end();
+  });
+
+});
+
+server.listen(8080);
+</code>
+</pre>
+
+<hr />

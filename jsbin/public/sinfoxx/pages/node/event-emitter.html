@@ -1,0 +1,78 @@
+<h1>Event Emitter</h1>
+
+<p>Callbacks funcionam bem para operações que têm um resultado. Há objectos onde vários eventos podem acontecer, e para isso usar uma callback não funciona bem.</p>
+
+<p>Vimos um exemplo de um event emitter quando efectuámos um pedido HTTP.</p>
+
+<h2>Exemplo de um servidor HTTP:</h2>
+
+<p><b>10_http_server_emitter.js</b></p>
+
+<pre>
+<code class="javascript">
+var http = require('http');
+
+var port = 8080;
+
+var server = http.createServer();
+
+server.once('listening', function() {
+  console.log('server is listening on port', port);
+});
+
+server.once('close', function() {
+  console.log('server is closed');
+});
+
+var requests = 0;
+var closing = false;
+
+server.on('request', function(req, res) {
+  res.end('Bye bye!');
+  requests ++;
+  if (requests > 2 && ! closing) {
+    console.log('closing...');
+    closing = true;
+    server.close();
+  }
+});
+
+server.on('error', function(err) {
+  console.error(err);
+});
+
+server.listen(port);
+</code>
+</pre>
+
+
+<h2>Pode criar o seu event emitter:</h2>
+
+<p><b>11_my_emitter.js:</b></p>
+
+<pre>
+<code class="javascript">
+var EventEmitter = require('events').EventEmitter;
+
+var emitter = new EventEmitter();
+
+emitter.on('tic', function() {
+  console.log('tic');
+});
+
+emitter.on('tac', function() {
+  console.log('tac');
+});
+
+var tic = true;
+setInterval(function() {
+  if (tic) emitter.emit('tic');
+  else emitter.emit('tac');
+  tic = ! tic;
+}, 1000);
+</code>
+</pre>
+
+<hr />
+
+<p>Next: <a href="#/node/streams">Streams</a></p>
