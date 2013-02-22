@@ -2,6 +2,7 @@ var app = angular.module('sinfoxx', []);
 app.config(function($routeProvider, $locationProvider) {
   $routeProvider.
     when('/', {templateUrl: 'pages/index.html'}).
+    when('/about', {templateUrl: 'pages//meta/about.html'}).
     when('/javascript', {templateUrl: 'pages/javascript.html'}).
     when('/consola', {templateUrl: 'pages/consola.html'}).
     when('/dynamic-typing', {templateUrl: 'pages/dynamic-typing.html'}).
