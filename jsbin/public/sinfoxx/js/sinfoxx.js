@@ -15,7 +15,9 @@ app.config(function($routeProvider, $locationProvider) {
     when('/node/install', {templateUrl: 'pages/node/install.html'}).
     when('/node/io', {templateUrl: 'pages/node/io.html'}).
     when('/node/event-emitter', {templateUrl: 'pages/node/event-emitter.html'}).
-    when('/node/streams', {templateUrl: 'pages/node/streams.html'});
+    when('/node/streams', {templateUrl: 'pages/node/streams.html'}).
+    when('/node/modules', {templateUrl: 'pages/node/modules.html'}).
+    when('/node/npm', {templateUrl: 'pages/node/npm.html'});
 });
 
 

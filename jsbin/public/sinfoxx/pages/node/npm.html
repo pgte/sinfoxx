@@ -1,0 +1,194 @@
+<h1>NPM - Node Package Manager</h1>
+
+<p>NPM é a forma de gerir e instalar dependências externas em Node.js.</p>
+
+<p>NPM é 3 coisas:
+
+<ul>
+  <li>Repositório</li>
+  <li>web app</li>
+  <li>Command-line tool</li>
+</ul>
+
+</p>
+
+<p>NPM vem instalado com o Node.</p>
+
+<h2>Declarar as dependencias locais:</h2>
+
+<p>Criar directoria para alojar novo projectp.</p>
+
+<pre>
+<code>
+$ mkdir app
+$ cd app
+</code>
+</pre>
+
+<p>Criar manifesto:</p>
+
+<p><b>package.json:</b></p>
+
+<pre>
+<code class="javascript">
+{
+  "name": "MyApp",
+  "version": "0.1.0",
+  "dependencies": {
+    "request": "*",
+    "nano": "3.3.x",
+    "async": "~0.2.0"
+  }
+}
+</code>
+</pre>
+
+<pre>
+<code>
+→ npm install
+npm WARN package.json MyApp@0.1.0 No README.md file found!
+npm http GET https://registry.npmjs.org/async
+npm http GET https://registry.npmjs.org/nano
+npm http GET https://registry.npmjs.org/request
+npm http 304 https://registry.npmjs.org/nano
+npm http 304 https://registry.npmjs.org/async
+npm http GET https://registry.npmjs.org/nano/-/nano-3.3.6.tgz
+npm http GET https://registry.npmjs.org/async/-/async-0.2.5.tgz
+npm http 200 https://registry.npmjs.org/request
+npm http 200 https://registry.npmjs.org/nano/-/nano-3.3.6.tgz
+npm http 200 https://registry.npmjs.org/async/-/async-0.2.5.tgz
+npm http GET https://registry.npmjs.org/extend
+npm http GET https://registry.npmjs.org/errs
+npm http GET https://registry.npmjs.org/follow
+npm http 200 https://registry.npmjs.org/extend
+npm http GET https://registry.npmjs.org/extend/-/extend-1.1.3.tgz
+npm http 200 https://registry.npmjs.org/follow
+npm http 200 https://registry.npmjs.org/errs
+npm http 200 https://registry.npmjs.org/extend/-/extend-1.1.3.tgz
+async@0.2.5 node_modules/async
+
+request@2.14.0 node_modules/request
+
+nano@3.3.6 node_modules/nano
+├── extend@1.1.3
+├── errs@0.2.3
+├── follow@0.8.0 (request@2.2.9)
+└── request@2.12.0
+</code>
+</pre>
+
+<p>E agora podemos usá-los:</p>
+
+<pre>
+<code>
+→ node
+> var nano = require('nano');
+undefined
+> nano
+{ [Function: database_module]
+  version: '3.3.6',
+  path: '/Users/pedroteixeira/projects/workshops/sinfoxx-code/npm/app/node_modules/nano' }
+> var request = require('request');
+undefined
+> request
+{ [Function: request]
+  debug: undefined,
+  initParams: [Function: initParams],
+  defaults: [Function],
+  forever: [Function],
+  get: [Circular],
+  post: [Function],
+  put: [Function],
+  head: [Function],
+  del: [Function],
+  jar: [Function],
+  cookie: [Function] }
+> var async = require('async');
+undefined
+> async
+{ noConflict: [Function],
+  nextTick: [Function],
+  each: [Function],
+...
+  compose: [Function] }
+</code>
+</pre>
+
+<p>E podemos usá-los a partir de directorias internas:</p>
+
+<pre>
+<code>
+→ mkdir lib
+pedroteixeira@Pedros-MacBook-Pro:~/projects/workshops/sinfoxx-code/npm/app (master) 
+→ cd lib
+pedroteixeira@Pedros-MacBook-Pro:~/projects/workshops/sinfoxx-code/npm/app/lib (master) 
+→ node
+> var nano = require('nano');
+undefined
+> nano
+{ [Function: database_module]
+  version: '3.3.6',
+  path: '/Users/pedroteixeira/projects/workshops/sinfoxx-code/npm/app/node_modules/nano' }
+</code>
+</pre>
+
+<p>Nesta directoria posso usar uma versão diferente do nano:</p>
+
+<p><b>lib/package.json:</b></p>
+
+<pre>
+<code class="javascript">
+{
+  "name": "MyApp-lib",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "nano": "3.3.5"
+  }
+}
+</code>
+</pre>
+
+<pre>
+<code>
+→ npm install nano@3.3.5
+npm WARN package.json MyApp@0.1.0 No README.md file found!
+npm http GET https://registry.npmjs.org/nano/3.3.5
+npm http 200 https://registry.npmjs.org/nano/3.3.5
+npm http GET https://registry.npmjs.org/nano/-/nano-3.3.5.tgz
+npm http 200 https://registry.npmjs.org/nano/-/nano-3.3.5.tgz
+npm http GET https://registry.npmjs.org/request
+npm http GET https://registry.npmjs.org/follow
+npm http GET https://registry.npmjs.org/errs
+npm http 304 https://registry.npmjs.org/request
+npm http 304 https://registry.npmjs.org/errs
+npm http 304 https://registry.npmjs.org/follow
+nano@3.3.5 ../node_modules/nano
+├── errs@0.2.3
+├── follow@0.8.0 (request@2.2.9)
+└── request@2.12.0
+→ node
+> var nano = require('nano');
+undefined
+> nano
+{ [Function: database_module]
+  version: '3.3.5',
+  path: '/Users/pedroteixeira/projects/workshops/sinfoxx-code/npm/app/node_modules/nano' }
+</code>
+</pre>
+
+<p>Enquanto, se na directoria inferior, continuamos a usar a versão lá instalada:</p>
+
+<pre>
+<code>
+→ cd ..
+pedroteixeira@Pedros-MacBook-Pro:~/projects/workshops/sinfoxx-code/npm/app (master) 
+→ node
+> var nano = require('nano');
+undefined
+> nano
+{ [Function: database_module]
+  version: '3.3.6',
+  path: '/Users/pedroteixeira/projects/workshops/sinfoxx-code/npm/app/node_modules/nano' }
+</code>
+</pre>

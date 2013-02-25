@@ -1,0 +1,84 @@
+<h1>Modules</h1>
+
+<p>Em Node.js, um módulo corresponde a um ficheiro, geralmente contendo código JavaScript.</p>
+
+<p>Vamos criar um módulo:</p>
+
+<p><b>modules/module_a.js:</b></p>
+
+<pre>
+<code class="javascript">
+module.exports = 'A';
+</code>
+</pre>
+
+<p>Vamos agora requerer o módulo:</p>
+
+<pre>
+<code class="javascript">
+→ node
+> var A = require('./module_a');
+undefined
+> a
+'A'
+</code>
+</pre>
+
+<p>Vamos criar outro módulo:</p>
+
+<p><b>modules/make_urgent.js:</b></p>
+
+<pre>
+<code class="javascript">
+module.exports =
+function makeUrgent(s) {
+  return s.toUpperCase() + '!!!';
+};
+</code>
+</pre>
+
+<p>E usá-lo:</p>
+
+<pre>
+<code class="javascript">
+→ node
+> var makeUrgent = require('./make_urgent');
+undefined
+> makeUrgent('pass me the salt');
+'PASS ME THE SALT!!!'
+</code>
+</pre>
+
+
+<p>Um módulo também pode exportar um objecto:</p>
+
+<p><b>modules/big_module.js:</b></p>
+
+<pre>
+<code class="javascript">
+module.exports = {
+  makeUrgent: require('./make_urgent'),
+  a: require('./module_a'),
+  pi: Math.PI
+};
+</code>
+</pre>
+
+<p>E podemos usá-lo agora:</p>
+
+<pre>
+<code class="javascript">
+> var bigModule = require('./big_module');
+undefined
+> bigModule
+{ makeUrgent: [Function: makeUrgent],
+  a: 'A',
+  pi: 3.141592653589793 }
+> bigModule.makeUrgent('hello');
+'HELLO!!!'
+</code>
+</pre>
+
+<hr />
+
+<p>Next: <a href="#/node/npm">NPM</p>
