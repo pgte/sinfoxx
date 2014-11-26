@@ -119,3 +119,8 @@
     "videos"
   ]
 }
+{
+    "session": {
+      "secret": "bfksfysa7e32kdhayu292sz"
+    }
+  }
