@@ -1,4 +1,9 @@
 {
+    "session": {
+      "secret": "bfksfysa7e32kdhayu292sz"
+    }
+}
+{
   "env": "development",
   "timezone": "UTC",
   "url": {
